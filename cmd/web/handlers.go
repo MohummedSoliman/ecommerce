@@ -1,7 +1,12 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+)
 
 func (app *application) VertualTerminal(w http.ResponseWriter, r *http.Request) {
-	app.infoLog.Println("Hit The Handler")
+	err := app.renderTemplate(w, r, "terminal", &templateData{})
+	if err != nil {
+		app.errorLog.Println(err)
+	}
 }
