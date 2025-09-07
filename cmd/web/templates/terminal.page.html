@@ -1,0 +1,74 @@
+{{template "base" .}} {{define "title"}} Virtual Termail {{end}} {{define
+"content"}}
+<h2 class="text-center mt-3">Virtual Termainal</h2>
+<hr />
+<form
+    action="/payment-successed"
+    method="post"
+    name="charge_form"
+    id="charge_form"
+    class="d-block needs-validation charge-form"
+    autocomplete="off"
+    novalidate
+>
+    <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input
+            type="text"
+            class="form-control"
+            id="amount"
+            name="amount"
+            autocomplete="amount-new"
+        />
+    </div>
+    <div class="mb-3">
+        <label for="cardholder-name" class="form-label">Cardholder Name</label>
+        <input
+            type="text"
+            class="form-control"
+            id="cardholder-name"
+            name="cardholder_name"
+            autocomplete="cardholder-name-new"
+        />
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">email</label>
+        <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            autocomplete="email-new"
+        />
+    </div>
+    <div class="mb-3">
+        <label for="card-element" class="form-label">Credit Card</label>
+        <div class="form-control" id="card-element"></div>
+        <div
+            class="alert-danger text-center"
+            id="cards-errors"
+            role="alert"
+        ></div>
+        <div
+            class="alert-success text-center"
+            id="cards-success"
+            role="alert"
+        ></div>
+    </div>
+    <hr />
+
+    <a
+        id="pay-button"
+        href="javascript:void(0)"
+        class="btn btn-primary"
+        onclick="val()"
+        >Charge Card</a
+    >
+</form>
+
+{{end}} {{define "js"}}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    function val() {}
+</script>
+{{end}}
