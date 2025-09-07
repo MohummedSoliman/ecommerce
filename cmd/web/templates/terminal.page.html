@@ -2,6 +2,7 @@
 "content"}}
 <h2 class="text-center mt-3">Virtual Termainal</h2>
 <hr />
+<div class="alert alert-danger text-center d-none" id="card-messages"></div>
 <form
     action="/payment-successed"
     method="post"
@@ -64,6 +65,11 @@
         onclick="val()"
         >Charge Card</a
     >
+    <div class="text-center d-none" id="processing-payment">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading</span>
+        </div>
+    </div>
 </form>
 
 {{end}} {{define "js"}}
@@ -71,10 +77,22 @@
 <script>
     let card;
     let stripe;
+    const cardMessages = document.getElementById("card-messages");
+    const payButton = document.getElementById("pay-button");
+    const processing = document.getElementById("processing-payment");
     stripe = Stripe(
         "pk_test_51S4i8sQQRyZEafz8oiLhjUW4bjPSPMDlsQEY2NJlKGcfODKabxyjBullglSlqM4eHC5pDfO30LXzqaV2lf9mTQPO00ReLxHh6F",
     );
-    function val() {}
+    function val() {
+        let form = document.getElementById("charge_form");
+        if (form.checkValidity() === false) {
+            this.event.preventDefault();
+            this.event.stopPropagation();
+            form.classList.add("was-validated");
+            return;
+        }
+        form.classList.add("was-validated");
+    }
 
     (function () {
         // Create Stripe & Elements
