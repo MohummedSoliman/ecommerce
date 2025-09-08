@@ -1,5 +1,5 @@
-// Package card for setting the card stripe integration logic.
-package card
+// Package cards for setting the card stripe integration logic.
+package cards
 
 import (
 	"github.com/stripe/stripe-go/v72"
