@@ -5,8 +5,41 @@ import (
 )
 
 func (app *application) VertualTerminal(w http.ResponseWriter, r *http.Request) {
-	err := app.renderTemplate(w, r, "terminal", &templateData{})
+	stringMap := make(map[string]string)
+	stringMap["publishable_key"] = app.config.stripe.key
+	err := app.renderTemplate(w, r, "terminal", &templateData{
+		StringMap: stringMap,
+	})
 	if err != nil {
+		app.errorLog.Println(err)
+	}
+}
+
+func (app *application) PaymentSucceeded(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+
+	cardHolder := r.Form.Get("cardholder_name")
+	email := r.Form.Get("email")
+	paymentIntent := r.Form.Get("payment_intent")
+	paymentMethod := r.Form.Get("payment_method")
+	paymentAmount := r.Form.Get("payment_amount")
+	paymentCurrency := r.Form.Get("payment_currency")
+
+	data := make(map[string]any)
+	data["cardholder"] = cardHolder
+	data["email"] = email
+	data["payment_intent"] = paymentIntent
+	data["payment_method"] = paymentMethod
+	data["payment_amount"] = paymentAmount
+	data["currency"] = paymentCurrency
+
+	if err = app.renderTemplate(w, r, "succeeded", &templateData{
+		Data: data,
+	}); err != nil {
 		app.errorLog.Println(err)
 	}
 }
