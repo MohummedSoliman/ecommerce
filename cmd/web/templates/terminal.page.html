@@ -85,9 +85,7 @@
     const cardMessages = document.getElementById("card-messages");
     const payButton = document.getElementById("pay-button");
     const processing = document.getElementById("processing-payment");
-    stripe = Stripe(
-        "pk_test_51S4i8sQQRyZEafz8oiLhjUW4bjPSPMDlsQEY2NJlKGcfODKabxyjBullglSlqM4eHC5pDfO30LXzqaV2lf9mTQPO00ReLxHh6F",
-    );
+    stripe = Stripe("{{index .StringMap `publishable_key`}}");
 
     function hidePayButton() {
         payButton.classList.add("d-none");
@@ -139,7 +137,7 @@
             body: JSON.stringify(payload),
         };
 
-        fetch("http://localhost:4001/api/payment-intent", reqOptions)
+        fetch("{{.API}}/api/payment-intent", reqOptions)
             .then((res) => res.text())
             .then((res) => {
                 let data;
@@ -183,7 +181,9 @@
                                     ).value = result.paymentIntent.currency;
                                     processing.classList.add("d-none");
                                     showCardSuccess();
-                                    // would submit the form
+                                    document
+                                        .getElementById("charge_form")
+                                        .submit();
                                 }
                             }
                         });
