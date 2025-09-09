@@ -1,0 +1,7 @@
+development:
+  dialect: mysql
+  database: widgets
+  user: mohamed
+  password: mypassword
+  host: localhost
+  pool: 5
