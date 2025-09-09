@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/MohummedSoliman/ecommerce/internal/driver"
+	"github.com/MohummedSoliman/ecommerce/internal/models"
 )
 
 const (
@@ -37,6 +38,7 @@ type application struct {
 	errorLog      *log.Logger
 	templateCache map[string]*template.Template
 	version       string
+	DB            models.DBModel
 }
 
 func (app *application) serve() error {
@@ -85,6 +87,7 @@ func main() {
 		errorLog:      errorLog,
 		templateCache: temCache,
 		version:       version,
+		DB:            models.DBModel{DB: conn},
 	}
 
 	err = app.serve()
