@@ -102,3 +102,40 @@ func (m *DBModel) GetWedgit(id int) (Widget, error) {
 
 	return widget, nil
 }
+
+func (m *DBModel) InsertTransaction(t Transaction) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `INSERT INTO transactions (amount, currency, last_four, bank_return_code, transaction_status_id)
+			  VALUES (?, ?, ?, ?, ?)`
+	result, err := m.DB.ExecContext(ctx, stmt, t.Amount, t.Currency, t.LastFour, t.BankReturnCode, t.TransactionStatusID)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(id), nil
+}
+
+func (m *DBModel) InsertOrder(o Order) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	stmt := `INSERT INTO order (widget_id, transaction_id, status_id, quantity, amount)
+			 VALUES (?, ?, ?, ?, ?)`
+	result, err := m.DB.ExecContext(ctx, stmt, o.WidgetID, o.TransactionID, o.StatusID, o.Quantity, o.Amount)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
+}
