@@ -2,6 +2,8 @@ package main
 
 import (
 	"net/http"
+
+	"github.com/MohummedSoliman/ecommerce/internal/models"
 )
 
 func (app *application) VertualTerminal(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +47,20 @@ func (app *application) PaymentSucceeded(w http.ResponseWriter, r *http.Request)
 }
 
 func (app *application) ChargeOne(w http.ResponseWriter, r *http.Request) {
-	err := app.renderTemplate(w, r, "buy-once", nil, "stripe-js")
+	widget := models.Widget{
+		ID:             1,
+		Name:           "Custom Widget",
+		Description:    "Very Nice Widget",
+		InventroyLevel: 10,
+		Price:          10.00,
+	}
+
+	data := make(map[string]any)
+	data["widget"] = widget
+
+	err := app.renderTemplate(w, r, "buy-once", &templateData{
+		Data: data,
+	}, "stripe-js")
 	if err != nil {
 		app.errorLog.Println(err)
 		return
