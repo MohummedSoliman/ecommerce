@@ -1,3 +1,4 @@
 ecommerce
 Makefile
 dist/
+.DS_Store
