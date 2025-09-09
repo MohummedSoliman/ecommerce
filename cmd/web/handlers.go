@@ -9,7 +9,7 @@ func (app *application) VertualTerminal(w http.ResponseWriter, r *http.Request) 
 	stringMap["publishable_key"] = app.config.stripe.key
 	err := app.renderTemplate(w, r, "terminal", &templateData{
 		StringMap: stringMap,
-	})
+	}, "stripe-js")
 	if err != nil {
 		app.errorLog.Println(err)
 	}
@@ -41,5 +41,13 @@ func (app *application) PaymentSucceeded(w http.ResponseWriter, r *http.Request)
 		Data: data,
 	}); err != nil {
 		app.errorLog.Println(err)
+	}
+}
+
+func (app *application) ChargeOne(w http.ResponseWriter, r *http.Request) {
+	err := app.renderTemplate(w, r, "buy-once", nil, "stripe-js")
+	if err != nil {
+		app.errorLog.Println(err)
+		return
 	}
 }
