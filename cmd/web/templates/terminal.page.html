@@ -13,13 +13,12 @@
     novalidate
 >
     <div class="mb-3">
-        <label for="amount" class="form-label">Amount</label>
+        <label for="charge_amount" class="form-label">Amount</label>
         <input
             type="text"
             class="form-control"
-            id="amount"
-            name="amount"
-            autocomplete="amount-new"
+            id="charge_amount"
+            autocomplete="charge_amount-new"
         />
     </div>
     <div class="mb-3">
@@ -71,10 +70,21 @@
         </div>
     </div>
 
+    <input type="hidden" name="amount" id="amount" />
     <input type="hidden" name="payment_intent" id="payment_intent" />
     <input type="hidden" name="payment_methos" id="payment_method" />
     <input type="hidden" name="payment_amount" id="payment_amount" />
     <input type="hidden" name="payment_currency" id="payment_currency" />
 </form>
 
-{{end}} {{define "js"}} {{template "stripe-js" .}} {{end}}
+{{end}} {{define "js"}}
+<script>
+    document.getElementById("charge_amount", function (event) {
+        if (event.target.value !== "") {
+            document.getElementById("amount").value = event.target.value * 100;
+        } else {
+            document.getElementById("amount").value = 0;
+        }
+    });
+</script>
+{{template "stripe-js" .}} {{end}}
