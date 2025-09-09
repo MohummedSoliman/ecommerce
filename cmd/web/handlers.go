@@ -7,11 +7,7 @@ import (
 )
 
 func (app *application) VertualTerminal(w http.ResponseWriter, r *http.Request) {
-	stringMap := make(map[string]string)
-	stringMap["publishable_key"] = app.config.stripe.key
-	err := app.renderTemplate(w, r, "terminal", &templateData{
-		StringMap: stringMap,
-	}, "stripe-js")
+	err := app.renderTemplate(w, r, "terminal", &templateData{}, "stripe-js")
 	if err != nil {
 		app.errorLog.Println(err)
 	}
