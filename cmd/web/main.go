@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/MohummedSoliman/ecommerce/internal/driver"
 )
 
 const (
@@ -57,6 +59,7 @@ func main() {
 
 	flag.IntVar(&config.port, "port", 4000, "Server Port to Listen on")
 	flag.StringVar(&config.env, "env", "development", "Application Environment {development|production}")
+	flag.StringVar(&config.db.dataSrcName, "dsn", "mohamed:mypassword@tcp(localhost:3306)/widgets?parseTime=true&tls=false", "DSN")
 	flag.StringVar(&config.api, "api", "http://localhost:4001", "URL to api")
 
 	flag.Parse()
@@ -66,6 +69,13 @@ func main() {
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	conn, err := driver.OpenDB(config.db.dataSrcName)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
+	defer conn.Close()
 
 	temCache := make(map[string]*template.Template)
 
@@ -77,7 +87,7 @@ func main() {
 		version:       version,
 	}
 
-	err := app.serve()
+	err = app.serve()
 	if err != nil {
 		app.errorLog.Println(err)
 		log.Fatal(err)
